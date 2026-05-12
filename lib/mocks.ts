@@ -1,5 +1,6 @@
 import type { Post } from "@/types/post";
 
+// Array of mock posts until dummy JSON API is ready
 export const MOCK_POSTS: Post[] = [
   {
     id: "1",

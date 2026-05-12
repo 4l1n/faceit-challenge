@@ -1,4 +1,4 @@
-import { PostFeed } from "@/components/PostFeed";
+import { PostFeed } from "@/components/Post/PostFeed";
 import { MOCK_POSTS } from "@/lib/mocks";
 
 export default function Home() {

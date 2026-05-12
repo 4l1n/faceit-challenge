@@ -1,45 +1,28 @@
 import Link from "next/link";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { getInitials, formatRelativeDate } from "@/lib/utils";
+import { BODY_PREVIEW_LENGTH } from "@/lib/contants";
 import type { Post } from "@/types/post";
-
-const BODY_PREVIEW_LENGTH = 100;
 
 interface PostCardProps {
   post: Post;
+  postPage?: boolean;
 }
 
-function formatRelativeDate(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const minutes = Math.floor(diff / 60_000);
-  if (minutes < 1) return "just now";
-  if (minutes < 60) return `${minutes}m ago`;
-  const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.floor(hours / 24)}d ago`;
-}
-
-function getInitials(name: string): string {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .join("")
-    .toUpperCase()
-    .slice(0, 2);
-}
-
-export function PostCard({ post }: PostCardProps) {
+const PostCard: React.FC<PostCardProps> = ({ post, postPage = false }: PostCardProps) => {
   const { author, body, createdAt } = post;
 
+  // Used to check if the post body is long and needs to be truncated
   const isLong = body.length > BODY_PREVIEW_LENGTH;
-  
-  const preview = isLong
+
+  // Truncate the post body if it is long
+  const preview = isLong && !postPage
     ? body.slice(0, BODY_PREVIEW_LENGTH).trimEnd() + "…"
     : body;
 
-  return (
-    <Link href={`/posts/${post.id}`} className="block group">
-    <Card className="w-full border-border bg-surface shadow-sm transition-shadow duration-200 group-hover:shadow-md cursor-pointer">
+  const card = (
+    <Card className={`w-full border-border bg-surface shadow-sm transition-shadow duration-200 ${!postPage ? "group-hover:shadow-md cursor-pointer" : ""}`}>
       <CardHeader className="flex flex-row items-center gap-3 pb-3">
         <Avatar className="size-10 shrink-0 ring-2 ring-primary-500/30">
           <AvatarImage src={author.avatarUrl} alt={author.name} />
@@ -60,6 +43,18 @@ export function PostCard({ post }: PostCardProps) {
         <p className="text-sm leading-relaxed text-foreground/80">{preview}</p>
       </CardContent>
     </Card>
+  );
+
+  if (postPage) {
+    return card;
+  }
+
+  return (
+    <Link href={`/posts/${post.id}`} className="block group">
+      {card}
     </Link>
   );
 }
+
+export default PostCard;
+
