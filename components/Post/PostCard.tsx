@@ -11,7 +11,7 @@ interface PostCardProps {
 }
 
 const PostCard: React.FC<PostCardProps> = ({ post, postPage = false }: PostCardProps) => {
-  const { author, body, createdAt } = post;
+  const { author, body, title } = post;
 
   // Used to check if the post body is long and needs to be truncated
   const isLong = body.length > BODY_PREVIEW_LENGTH;
@@ -35,11 +35,13 @@ const PostCard: React.FC<PostCardProps> = ({ post, postPage = false }: PostCardP
           <span className="font-semibold text-foreground text-sm leading-tight truncate">
             {author.name}
           </span>
-          <span className="text-xs text-muted">{formatRelativeDate(createdAt)}</span>
         </div>
       </CardHeader>
 
-      <CardContent className="pt-0">
+      <CardContent className="pt-0 flex flex-col gap-2">
+        {title && (
+          <p className="font-semibold text-foreground text-sm leading-snug">{title}</p>
+        )}
         <p className="text-sm leading-relaxed text-foreground/80">{preview}</p>
       </CardContent>
     </Card>

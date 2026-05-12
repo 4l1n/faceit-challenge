@@ -116,16 +116,14 @@
 }
 
 /* ============================================================
-   SURFACE TOKENS — Dark Mode
+   SURFACE TOKENS — Dark Mode (Now inside .dark for next-themes)
    ============================================================ */
-@media (prefers-color-scheme: dark) {
-  :root { /* deep navy-black */
-    --surface:     #1A2430;
-    --surface-alt: #1E2D3D;
-    --border:      var(--color-secondary-700);
-    --muted:       var(--color-secondary-400);
-    --ring:        var(--color-primary-400);
-  }
+.dark {
+  --surface:     #1A2430;
+  --surface-alt: #1E2D3D;
+  --border:      var(--color-secondary-700);
+  --muted:       var(--color-secondary-400);
+  --ring:        var(--color-primary-400);
 }
 
 /* ============================================================
@@ -295,8 +293,8 @@
 }
 
 .dark {
-  --background:  oklch(0.145 0 0);
-  --foreground:  oklch(0.985 0 0);
+  --background:  #0F1923; /* deep navy-black from original theme */
+  --foreground:  var(--color-neutral-100);
   --card:  oklch(0.205 0 0);
   --card-foreground:  oklch(0.985 0 0);
   --popover:  oklch(0.205 0 0);
