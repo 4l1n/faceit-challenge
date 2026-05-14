@@ -8,6 +8,7 @@ export interface Post {
     name: string;
     avatarUrl: string;
   };
+  isNew?: boolean;
 }
 
 export type PostsResponse = {

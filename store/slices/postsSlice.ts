@@ -70,7 +70,18 @@ const initialExtraState: PostsExtraState = {
 const postsSlice = createSlice({
   name: "posts",
   initialState: postsAdapter.getInitialState(initialExtraState),
-  reducers: {},
+  reducers: {
+    addFakePost: (state, action: import("@reduxjs/toolkit").PayloadAction<Post>) => {
+      // Add the entity and the ID to the end
+      postsAdapter.addOne(state, action.payload);
+      // Move the newly added ID from the end to the beginning to prepend it
+      const newId = state.ids.pop();
+      if (newId !== undefined) {
+        state.ids.unshift(newId);
+      }
+      state.totalPosts += 1;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchPosts.pending, (state) => {
@@ -93,6 +104,8 @@ const postsSlice = createSlice({
 });
 
 export default postsSlice.reducer;
+
+export const { addFakePost } = postsSlice.actions;
 
 export const {
   selectAll: selectAllPosts,

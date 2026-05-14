@@ -2,8 +2,10 @@
 
 import { useCallback, useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { toast } from "sonner";
 import {
   fetchPosts,
+  addFakePost,
   selectAllPosts,
   selectPostsStatus,
   selectPostsError,
@@ -26,6 +28,44 @@ const PostFeedContainer: React.FC = () => {
     if (status === "idle") {
       dispatch(fetchPosts(1));
     }
+  }, [dispatch, status]);
+
+  // Simulate real-time WebSockets
+  useEffect(function simulateRealTimePosts() {
+    // Only start simulating once the initial load is done
+    if (status !== "succeeded") return;
+
+    const interval = setInterval(() => {
+      const newId = Date.now();
+      
+      const fakePost = {
+        id: newId,
+        title: "Real-time Update!",
+        body: "This is a simulated real-time post arriving via our fake websocket. Notice how it appeared at the top!",
+        userId: 999,
+        author: {
+          id: 999,
+          name: "System User",
+          avatarUrl: "https://api.dicebear.com/9.x/avataaars/svg?seed=system",
+        },
+        isNew: true,
+      };
+
+      dispatch(addFakePost(fakePost));
+
+      // Notify the user subtly with Sonner
+      toast.success("New post arrived!", {
+        description: "System User just posted something new.",
+        action: {
+          label: "View",
+          onClick: () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          },
+        },
+      });
+    }, 15000); // 15s interval for testing
+
+    return () => clearInterval(interval);
   }, [dispatch, status]);
 
   // Track whether we've already scrolled so new posts arriving via infinite

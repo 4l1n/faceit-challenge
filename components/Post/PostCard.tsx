@@ -22,7 +22,7 @@ const PostCard: React.FC<PostCardProps> = ({ post, postPage = false }: PostCardP
     : body;
 
   const card = (
-    <Card className={`w-full border-border bg-surface shadow-sm transition-shadow duration-200 ${!postPage ? "group-hover:shadow-md cursor-pointer" : ""}`}>
+    <Card className={`w-full border-border bg-surface shadow-sm transition-shadow duration-200 ${!postPage ? "group-hover:shadow-md cursor-pointer" : ""} ${post.isNew ? "animate-highlight" : ""}`}>
       <CardHeader className="flex flex-row items-center gap-3 pb-3">
         <Avatar className="size-10 shrink-0 ring-2 ring-primary-500/30">
           <AvatarImage src={author.avatarUrl} alt={author.name} />

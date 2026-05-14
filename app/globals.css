@@ -113,6 +113,10 @@
   --sidebar-accent-foreground:  oklch(0.205 0 0);
   --sidebar-border:  oklch(0.922 0 0);
   --sidebar-ring:  oklch(0.708 0 0);
+
+  /* Highlight Animation Vars */
+  --highlight-bg: var(--color-primary-50);
+  --highlight-border: var(--color-primary-500);
 }
 
 /* ============================================================
@@ -292,6 +296,19 @@
   }
 }
 
+@keyframes highlight-post {
+  0% {
+    background-color: var(--highlight-bg);
+    border-color: var(--highlight-border);
+    box-shadow: 0 0 15px -3px var(--highlight-border);
+    transform: translateY(-2px);
+  }
+}
+
+.animate-highlight {
+  animation: highlight-post 4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 .dark {
   --background:  #0F1923; /* deep navy-black from original theme */
   --foreground:  var(--color-neutral-100);
@@ -324,4 +341,8 @@
   --sidebar-accent-foreground:  oklch(0.985 0 0);
   --sidebar-border:  oklch(1 0 0 / 10%);
   --sidebar-ring:  oklch(0.556 0 0);
+
+  /* Highlight Animation Vars (Dark) */
+  --highlight-bg: rgba(255, 109, 0, 0.15); /* primary-500 with opacity */
+  --highlight-border: var(--color-primary-500);
 }
