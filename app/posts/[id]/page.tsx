@@ -86,7 +86,8 @@ const PostPage: React.FC<PostPageProps> = ({ params }) => {
       <div className="mx-auto w-full max-w-2xl">
         {/* Back link */}
         <Link
-          href="/"
+          href={`/?scrollTo=${id}`}
+          scroll={false}
           className="inline-flex items-center gap-1.5 text-sm hover:opacity-80 transition-colors mb-8"
         >
           ← Back to feed

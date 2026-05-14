@@ -52,7 +52,10 @@ const PostCard: React.FC<PostCardProps> = ({ post, postPage = false }: PostCardP
   }
 
   return (
-    <Link href={`/posts/${post.id}`} className="block group">
+    <Link
+      href={`/posts/${post.id}`}
+      className="block group"
+    >
       {card}
     </Link>
   );

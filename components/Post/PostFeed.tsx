@@ -78,7 +78,7 @@ const PostFeed: React.FC<PostFeedProps> = ({
   return (
     <ul className="flex flex-col gap-4 w-full">
       {posts.map((post) => (
-        <li key={post.id}>
+        <li key={post.id} id={`post-${post.id}`}>
           <PostCard post={post} />
         </li>
       ))}
