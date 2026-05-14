@@ -55,6 +55,7 @@ interface PostsExtraState {
   currentPage: number;
   totalPosts: number;
   postsPerPage: number;
+  hasMore: boolean;
 }
 
 const initialExtraState: PostsExtraState = {
@@ -63,6 +64,7 @@ const initialExtraState: PostsExtraState = {
   currentPage: 1,
   totalPosts: 0,
   postsPerPage: POSTS_PER_PAGE,
+  hasMore: true,
 };
 
 const postsSlice = createSlice({
@@ -79,7 +81,9 @@ const postsSlice = createSlice({
         state.status = "succeeded";
         state.currentPage = action.payload.page;
         state.totalPosts = action.payload.total;
-        postsAdapter.setAll(state, action.payload.posts);
+        // upsertMany appends new posts without wiping existing ones (infinite scroll)
+        postsAdapter.upsertMany(state, action.payload.posts);
+        state.hasMore = state.ids.length < action.payload.total;
       })
       .addCase(fetchPosts.rejected, (state, action) => {
         state.status = "failed";
@@ -102,3 +106,4 @@ export const selectCurrentPage = (state: RootState) => state.posts.currentPage;
 export const selectTotalPosts = (state: RootState) => state.posts.totalPosts;
 export const selectPostsPerPage = (state: RootState) => state.posts.postsPerPage;
 export const selectTotalPages = (state: RootState) => Math.ceil(state.posts.totalPosts / state.posts.postsPerPage);
+export const selectHasMore = (state: RootState) => state.posts.hasMore;

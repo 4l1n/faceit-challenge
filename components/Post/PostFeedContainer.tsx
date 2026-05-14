@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import {
   fetchPosts,
@@ -8,7 +8,7 @@ import {
   selectPostsStatus,
   selectPostsError,
   selectCurrentPage,
-  selectTotalPages,
+  selectHasMore,
 } from "@/store/slices/postsSlice";
 import { Button } from "@/components/ui/button";
 import PostFeed from "./PostFeed";
@@ -20,7 +20,7 @@ const PostFeedContainer: React.FC = () => {
   const status = useAppSelector(selectPostsStatus);
   const error = useAppSelector(selectPostsError);
   const currentPage = useAppSelector(selectCurrentPage);
-  const totalPages = useAppSelector(selectTotalPages);
+  const hasMore = useAppSelector(selectHasMore);
 
   useEffect(function fetchPostsOnMount() {
     if (status === "idle") {
@@ -28,10 +28,12 @@ const PostFeedContainer: React.FC = () => {
     }
   }, [dispatch, status]);
 
-  const goToPage = (page: number) => {
-    dispatch(fetchPosts(page));
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // Called by PostFeed when the sentinel enters the viewport
+  const handleLoadMore = useCallback(() => {
+    if (status !== "loading" && hasMore) {
+      dispatch(fetchPosts(currentPage + 1));
+    }
+  }, [dispatch, status, hasMore, currentPage]);
 
   if (status === "failed") {
     return (
@@ -46,10 +48,13 @@ const PostFeedContainer: React.FC = () => {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      {/* Feed */}
-      <PostFeed posts={posts} isLoading={status === "loading"} />
-    </div>
+    <PostFeed
+      posts={posts}
+      isLoading={status === "loading" && posts.length === 0}
+      isLoadingMore={status === "loading" && posts.length > 0}
+      hasMore={hasMore}
+      onLoadMore={handleLoadMore}
+    />
   );
 };
 
